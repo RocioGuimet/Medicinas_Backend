@@ -2,6 +2,7 @@ package com.medicina.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,12 +20,11 @@ public class Medicina {
     private String modoUso;
     private String nombreCientifico;
 
-    // LADO PROPIETARIO de la relación
     @ManyToMany
     @JoinTable(
             name = "medicina_sintoma",
             joinColumns = @JoinColumn(name = "medicina_id"),
             inverseJoinColumns = @JoinColumn(name = "sintoma_id")
     )
-    private List<Sintoma> sintomasQueAlivia;
+    private List<Sintoma> sintomasQueAlivia = new ArrayList<>();
 }

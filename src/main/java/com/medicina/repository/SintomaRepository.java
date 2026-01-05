@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SintomaRepository extends JpaRepository<Sintoma, Long> {
-    // Métodos personalizados que necesitarás:
-    Sintoma findByNombre(String nombre);
-    List<Sintoma> findByNombreContainingIgnoreCase(String nombre);
+
 }

@@ -2,6 +2,7 @@ package com.medicina.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,6 @@ public class Sintoma {
 
     private String descripcion;
 
-    // LADO INVERSO de la relación
     @ManyToMany(mappedBy = "sintomasQueAlivia")
-    private List<Medicina> medicinasRecomendadas;
+    private List<Medicina> medicinasRecomendadas = new ArrayList<>();
 }
