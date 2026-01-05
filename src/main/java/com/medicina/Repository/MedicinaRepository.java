@@ -1,4 +1,4 @@
-package com.example.demo.Repository;
+package com.medicina.Repository;
 
 public class MedicinaRepository {
 }
