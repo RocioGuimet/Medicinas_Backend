@@ -1,9 +1,9 @@
 spring.application.name=Medicina
 
-# Conexion a MySQL -
-spring.datasource.url=jdbc:mysql://localhost:3306/medicinas_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=admin
+# Conexion MySQL (LOCAL + DOCKER)
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/medicinas_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+spring.datasource.username=TU_USUARIO
+spring.datasource.password=TU_PASSWORD
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 #Data sql
