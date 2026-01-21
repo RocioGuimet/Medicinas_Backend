@@ -204,12 +204,57 @@
 
             .search-box {
                 flex-direction: column;
+                gap: 15px;
+            }
+
+            #searchInput {
+                padding: 18px 20px;  /* ← AÑADE: Más alto para dedos */
+                font-size: 1.05rem;   /* ← AÑADE: Texto un poco más grande */
             }
 
             #searchButton {
                 width: 100%;
                 justify-content: center;
+                padding: 18px 30px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                font-size: 1.05rem;
+                border-radius: 15px;
             }
+
+            .medicines-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .medicine-card {
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .search-section {
+                padding: 20px 15px;
+            }
+
+            .results-section {
+                padding: 20px 15px;
+            }
+
+            #searchButton {
+                padding: 20px 30px;
+                font-size: 1.1rem;
+            }
+
+            #searchInput {
+                padding: 20px;
+                font-size: 1.1rem;
+            }
+        }
         }
     </style>
 </head>

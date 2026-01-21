@@ -47,7 +47,7 @@ public class MedicinaController {
         }
     }
 
-    @GetMapping("/test")
+    @GetMapping("/health-check")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("✅ API Medicina funcionando - " + new java.util.Date());
     }
