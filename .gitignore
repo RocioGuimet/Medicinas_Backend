@@ -33,7 +33,7 @@ build/
 .vscode/
 
 # Configuración de Spring Boot con contraseñas
-src/main/resources/application.properties
+src/main/resources/application.properties.local
 src/main/resources/application.yml
 src/main/resources/application-*.properties
 

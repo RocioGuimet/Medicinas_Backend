@@ -47,9 +47,13 @@ public class MedicinaController {
         }
     }
 
-    @GetMapping("/health-check")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("✅ API Medicina funcionando - " + new java.util.Date());
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, Object>> healthCheck() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("service", "Medicinas Naturales API");
+        response.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/medicinas/count")
