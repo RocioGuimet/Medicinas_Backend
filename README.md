@@ -1,6 +1,6 @@
-# 🌿 Medicinas Naturales - API REST con Spring Boot & Docker
+# 🌿 Medicinas Naturales -
 
-**API REST completa para consulta de medicinas naturales** con frontend integrado, Dockerizado y lista para producción.
+**API REST completa para consulta de medicinas naturales** con Spring Boot, PostgreSQL, frontend integrado, Dockerizado y despliegue en Render.
 
 ## ✨ Características
 
@@ -8,16 +8,17 @@
 * ✅ **Spring Boot 4** con Java 25
 * ✅ **API REST** con endpoints documentados
 * ✅ **Spring Data JPA** + relaciones `@ManyToMany`
-* ✅ **MySQL 8** con transacciones y persistencia
+* ✅ **PostgreSQL** con transacciones y persistencia  
 * ✅ **Manejo de excepciones** global con `@ControllerAdvice`
 * ✅ **Logging estructurado** para debugging
 
-### 🐳 **Dockerización Profesional**
-* ✅ **Multi-stage builds** (imágenes optimizadas ~150MB)
-* ✅ **Docker Compose** (MySQL + App en un comando)
-* ✅ **Health checks** para orquestación confiable
-* ✅ **Volúmenes persistentes** (datos sobreviven reinicios)
-* ✅ **Variables de entorno** (configuración segura)
+### ☁️ **Despliegue en la Nube (Render)**
+✅ **Dockerización** profesional con multi-stage builds  
+✅ **Base de datos PostgreSQL** gestionada por Render  
+✅ **Variables de entorno** seguras en Render Dashboard  
+✅ **Health checks** automáticos  
+✅ **Despliegue automático** desde GitHub  
+✅ **URL pública** accesible desde cualquier lugar  
 
 ### 🌐 **Frontend Integrado**
 * ✅ **HTML/CSS/JS vanilla** (cero dependencias)
@@ -40,17 +41,22 @@
 | ![Desktop](https://raw.githubusercontent.com/RocioGuimet/Medicinas_Backend/refs/heads/main/Screenshots/Desktop.png) | ![Mobile](https://raw.githubusercontent.com/RocioGuimet/Medicinas_Backend/refs/heads/main/Screenshots/Movil.png) |
 | Búsqueda en tiempo real | Diseño responsive |
 
-## 🚀 Demo Rápida
+## 🚀 Despliegue rápido
 
+### Opción 1: Local con Docker (MySQL)
 ```bash
-# ¡En 3 comandos tenes todo funcionando!
 git clone https://github.com/RocioGuimet/Medicinas_Backend.git
 cd Medicinas_Backend
 docker-compose up --build
 ```
+Nota: Usa MySQL local en Docker
 
-Accede a:
-
-🌐 Frontend: http://localhost:8080
-🔗 API REST: http://localhost:8080/api/medicinas
-📊 MySQL: Puerto 3308 (para evitar conflictos)
+### Opción 2: Render (PostgreSQL en la nube)
+```bash
+# 1. Fork este repositorio
+# 2. Crea cuenta en render.com  
+# 3. New + → Web Service (conectar GitHub)
+# 4. Selecciona Docker como runtime
+# 5. Agrega variables de entorno (Render Dashboard)
+# 6. ¡Listo! API pública en https://tu-api.onrender.com
+```
