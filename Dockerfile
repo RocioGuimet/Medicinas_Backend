@@ -18,4 +18,4 @@ COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE $PORT
 
-CMD ["java", "-Dserver.port=$PORT", "-jar", "app.jar"]
+CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]
