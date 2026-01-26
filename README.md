@@ -13,12 +13,12 @@
 * ✅ **Logging estructurado** para debugging
 
 ### ☁️ **Despliegue en la Nube (Render)**
-✅ **Dockerización** profesional con multi-stage builds  
-✅ **Base de datos PostgreSQL** gestionada por Render  
-✅ **Variables de entorno** seguras en Render Dashboard  
-✅ **Health checks** automáticos  
-✅ **Despliegue automático** desde GitHub  
-✅ **URL pública** accesible desde cualquier lugar  
+* ✅ **Dockerización** profesional con multi-stage builds  
+* ✅ **Base de datos PostgreSQL** gestionada por Render  
+* ✅ **Variables de entorno** seguras en Render Dashboard  
+* ✅ **Health checks** automáticos  
+* ✅ **Despliegue automático** desde GitHub  
+* ✅ **URL pública** accesible desde cualquier lugar  
 
 ### 🌐 **Frontend Integrado**
 * ✅ **HTML/CSS/JS vanilla** (cero dependencias)
