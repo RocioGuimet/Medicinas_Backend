@@ -1,6 +1,8 @@
 package com.medicina.controller;
 
+import com.medicina.entity.Medicina;
 import com.medicina.entity.Sintoma;
+import com.medicina.repository.MedicinaRepository;
 import com.medicina.repository.SintomaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ public class SintomaController {
 
     @Autowired
     private SintomaRepository sintomaRepository;
+    @Autowired
+    private MedicinaRepository medicinaRepository;
 
     @GetMapping("/sintomas")
     public ResponseEntity<?> obtenerTodosSintomas() {
@@ -46,6 +50,52 @@ public class SintomaController {
         }
     }
 
+    @GetMapping("/sintomas/{id}/medicinas")
+    public ResponseEntity<?> obtenerMedicinasDeSintoma(@PathVariable Long id) {
+        try {
+            Sintoma sintoma = sintomaRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Síntoma no encontrado"));
+
+            List<Map<String, String>> response = sintoma.getMedicinasRecomendadas().stream()
+                    .map(medicina -> {
+                        Map<String, String> medMap = new HashMap<>();
+                        medMap.put("id", medicina.getId().toString());
+                        medMap.put("nombre", medicina.getNombre());
+                        medMap.put("descripcion", medicina.getDescripcion());
+                        medMap.put("modoUso", medicina.getModoUso());
+                        return medMap;
+                    })
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("Error obteniendo medicinas: ", e);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/sintomas/medicina/{medicinaId}")
+    public ResponseEntity<?> obtenerSintomasPorMedicina(@PathVariable Long medicinaId) {
+        try {
+            List<Sintoma> sintomas = sintomaRepository.findByMedicinaId(medicinaId);
+
+            List<Map<String, String>> response = sintomas.stream()
+                    .map(sin -> {
+                        Map<String, String> sinMap = new HashMap<>();
+                        sinMap.put("id", sin.getId().toString());
+                        sinMap.put("nombre", sin.getNombre());
+                        sinMap.put("descripcion", sin.getDescripcion());
+                        return sinMap;
+                    })
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("Error: ", e);
+            return ResponseEntity.internalServerError()
+                    .body("Error: " + e.getMessage());
+        }
+    }
     @PostMapping("/sintomas")
     public ResponseEntity<?> crearSintoma(@RequestBody Sintoma sintoma) {
         try {
@@ -68,6 +118,39 @@ public class SintomaController {
             return ResponseEntity.internalServerError()
                     .body("Error: " + e.getMessage() +
                             "\nStack: " + e.getStackTrace()[0]);
+        }
+    }
+    @PostMapping("/sintomas/{sintomaId}/medicinas/{medicinaId}")
+    public ResponseEntity<?> agregarMedicinaASintoma(
+            @PathVariable Long sintomaId,
+            @PathVariable Long medicinaId) {
+
+        try {
+
+            Sintoma sintoma = sintomaRepository.findById(sintomaId)
+                    .orElseThrow(() -> new RuntimeException("Síntoma no encontrado"));
+
+            Medicina medicina = medicinaRepository.findById(medicinaId)
+                    .orElseThrow(() -> new RuntimeException("Medicina no encontrada"));
+
+            if (!sintoma.getMedicinasRecomendadas().contains(medicina)) {
+                sintoma.getMedicinasRecomendadas().add(medicina);
+                sintomaRepository.save(sintoma);
+            }
+
+            Map<String, String> response = new HashMap<>();
+            response.put("mensaje", "Medicina agregada al síntoma exitosamente");
+            response.put("sintoma", sintoma.getNombre());
+            response.put("medicina", medicina.getNombre());
+
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+            logger.error("Error agregando medicina: ", e);
+            return ResponseEntity.status(404).body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error: ", e);
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 }

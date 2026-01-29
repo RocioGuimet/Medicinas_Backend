@@ -15,7 +15,6 @@ public class Sintoma {
 
     @Column(nullable = false, unique = true)
     private String nombre;
-
     private String descripcion;
 
     @ManyToMany(mappedBy = "sintomasQueAlivia")

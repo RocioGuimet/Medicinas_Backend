@@ -37,7 +37,6 @@ public class SecurityConfig {
                 // Autorización de endpoints
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/**", "/health", "/").permitAll()
-                        .anyRequest().authenticated()
                 )
                 // Deshabilitar CSRF para APIs REST
                 .csrf(csrf -> csrf.disable());
