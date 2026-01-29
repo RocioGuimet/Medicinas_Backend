@@ -28,7 +28,12 @@
 * ✅ **Estados de carga/error** visuales
 
 ### 🔐 **Seguridad y Buenas Prácticas**
-* ✅ **CORS Configuration** para control de acceso
+* ✅ CORS Configuration para control de acceso: 
+   - Pre-configurado para frontend externo futuro
+   - Orígenes permitidos: `http://localhost:3000`, `https://*.render.com`
+   - Métodos: GET y POST (API principalmente de consulta, POST para administradores)
+   - Headers: Origin, Content-Type, Accept, Authorization
+   - Credenciales habilitadas para autenticación futura
 * ✅ **Security HTTP Headers** (XSS, HSTS, CSP)
 * ✅ **`.gitignore`** configurado (protección de secrets)
 * ✅ **Variables por entorno** (dev/docker/prod)
