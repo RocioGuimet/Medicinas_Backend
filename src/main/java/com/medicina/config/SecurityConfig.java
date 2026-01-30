@@ -31,7 +31,16 @@ public class SecurityConfig {
 
                 // Autorización de Endpoints
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/health",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/error",
+                                "/api/public/**"
+                        ).permitAll()
+
+                        .anyRequest().authenticated()
                 )
 
                 // Headers de seguridad
