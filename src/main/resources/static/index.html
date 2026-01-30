@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicinas Naturales - Buscador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, #2E7D32, #4CAF50);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #4CAF50;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #2E7D32;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        #searchButton {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #searchButton:hover {
+            background: #2E7D32;
+            transform: translateY(-2px);
+        }
+
+        .results-section {
+            padding: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-header h2 {
+            color: #333;
+        }
+
+        #resultsCount {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .medicines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .medicine-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+        }
+
+        .medicine-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .medicine-header {
+            background: linear-gradient(to right, #E8F5E9, #C8E6C9);
+            padding: 20px;
+            border-bottom: 1px solid #C8E6C9;
+        }
+
+        .medicine-name {
+            font-size: 1.4rem;
+            color: #2E7D32;
+            margin-bottom: 5px;
+        }
+
+        .medicine-id {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .medicine-body {
+            padding: 20px;
+        }
+
+        .medicine-desc {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .medicine-usage {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4CAF50;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            #searchInput {
+                padding: 18px 20px;  /* ← AÑADE: Más alto para dedos */
+                font-size: 1.05rem;   /* ← AÑADE: Texto un poco más grande */
+            }
+
+            #searchButton {
+                width: 100%;
+                justify-content: center;
+                padding: 18px 30px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                font-size: 1.05rem;
+                border-radius: 15px;
+            }
+
+            .medicines-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .medicine-card {
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .search-section {
+                padding: 20px 15px;
+            }
+
+            .results-section {
+                padding: 20px 15px;
+            }
+
+            #searchButton {
+                padding: 20px 30px;
+                font-size: 1.1rem;
+            }
+
+            #searchInput {
+                padding: 20px;
+                font-size: 1.1rem;
+            }
+        }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-leaf"></i> Medicinas Naturales</h1>
+        <p>"Que tu alimento sea tu medicina, y tu medicina tu alimento" -Hipócrates</p>
+    </header>
+
+    <section class="search-section">
+        <div class="search-box">
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Busca una medicina (ej: manzanilla, jengibre...)"
+                    autocomplete="off"
+            >
+            <button id="searchButton">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div class="results-header">
+            <h2 id="resultsTitle">Todas las medicinas</h2>
+            <span id="resultsCount">0 encontradas</span>
+        </div>
+
+        <div id="resultsContainer" class="medicines-grid">
+            <div class="empty-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando medicinas...</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>API Medicinas Naturales • Proyecto de Rocio Lourdes Guimet</p>
+    </footer>
+</div>
+
+<script>
+    // Variables globales
+    let allMedicines = [];
+
+    // Cargar todas las medicinas al inicio
+    document.addEventListener('DOMContentLoaded', () => {
+        loadMedicines();
+
+        // Configurar búsqueda en tiempo real
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', debounce(() => {
+            searchMedicines(searchInput.value);
+        }, 300));
+
+        // Configurar botón de búsqueda
+        document.getElementById('searchButton').addEventListener('click', () => {
+            searchMedicines(searchInput.value);
+        });
+
+        // Buscar al presionar Enter
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchMedicines(searchInput.value);
+            }
+        });
+    });
+
+    // Función para cargar todas las medicinas
+    async function loadMedicines() {
+        try {
+            showLoading();
+            const response = await fetch('/api/medicinas');
+            if (!response.ok) throw new Error('Error al cargar medicinas');
+
+            allMedicines = await response.json();
+            displayMedicines(allMedicines);
+            updateResultsTitle('Todas las medicinas', allMedicines.length);
+        } catch (error) {
+            console.error('Error:', error);
+            showError('No se pudieron cargar las medicinas. Intenta recargar la página.');
+        }
+    }
+
+    // Función para buscar medicinas
+    async function searchMedicines(query) {
+        try {
+            showLoading();
+
+            let medicines;
+            if (!query.trim()) {
+                // Si no hay búsqueda, mostrar todas
+                medicines = allMedicines;
+            } else {
+                // Hacer búsqueda en API
+                const response = await fetch(`/api/medicinas/buscar?q=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Error en la búsqueda');
+                medicines = await response.json();
+            }
+
+            displayMedicines(medicines);
+            updateResultsTitle(
+                query.trim() ? `Resultados para "${query}"` : 'Todas las medicinas',
+                medicines.length
+            );
+        } catch (error) {
+            console.error('Error:', error);
+            showError('Error en la búsqueda. Intenta nuevamente.');
+        }
+    }
+
+    // Función para mostrar medicinas en la página
+    function displayMedicines(medicines) {
+        const container = document.getElementById('resultsContainer');
+
+        if (medicines.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1">
+                    <i class="fas fa-search"></i>
+                    <h3>No se encontraron medicinas</h3>
+                    <p>Intenta con otros términos de búsqueda</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = medicines.map(medicine => `
+            <div class="medicine-card">
+                <div class="medicine-header">
+                    <h3 class="medicine-name">${escapeHtml(medicine.nombre)}</h3>
+                    <div class="medicine-id">ID: ${medicine.id}</div>
+                </div>
+                <div class="medicine-body">
+                    <p class="medicine-desc">${escapeHtml(medicine.descripcion || 'Sin descripción disponible')}</p>
+                    <div class="medicine-usage">
+                        <i class="fas fa-mortar-pestle"></i>
+                        <span>${escapeHtml(medicine.modoUso || 'Uso no especificado')}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Función para actualizar título y contador
+    function updateResultsTitle(title, count) {
+        document.getElementById('resultsTitle').textContent = title;
+        document.getElementById('resultsCount').textContent = `${count} ${count === 1 ? 'encontrada' : 'encontradas'}`;
+    }
+
+    // Función para mostrar estado de carga
+    function showLoading() {
+        const container = document.getElementById('resultsContainer');
+        container.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando...</p>
+            </div>
+        `;
+    }
+
+    // Función para mostrar error
+    function showError(message) {
+        const container = document.getElementById('resultsContainer');
+        container.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>¡Ups! Algo salió mal</h3>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+
+    // Utilidad: debounce para búsqueda en tiempo real
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Utilidad: escapar HTML para seguridad
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html>
