@@ -1,3 +1,5 @@
+package com.medicina.controller;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
@@ -6,7 +8,6 @@ import java.util.HashMap;
 
 @RestController
 public class HealthController {
-
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> healthCheck() {
         Map<String, Object> response = new HashMap<>();
