@@ -1,46 +1,58 @@
 package com.medicina.config;
 
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Headers de seguridad
-                .cors(cors -> {})
-                .headers(headers -> headers
-                        .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self' https://*.render.com; script-src 'self'; style-src 'self'; img-src 'self' data:")
-                        )
-                        .httpStrictTransportSecurity(hsts -> hsts
-                                .includeSubDomains(true)
-                                .preload(true)
-                                .maxAgeInSeconds(31536000) // 1 año
-                        )
-                        .frameOptions(frame -> frame.sameOrigin())
-                        .xssProtection(xss -> xss
-                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
-                        )
-                        .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff"))
-                        .addHeaderWriter(new StaticHeadersWriter("X-Frame-Options", "DENY"))
-                        .addHeaderWriter(new StaticHeadersWriter("Referrer-Policy", "strict-origin-when-cross-origin"))
-                )
-                // Autorización de endpoints
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**", "/health", "/").permitAll()
-                )
+                // Cors
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 // Deshabilitar CSRF para APIs REST
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable())
+
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Autorización de Endpoints
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
+                )
+
+                // Headers de seguridad
+                .headers(headers -> headers
+                        .contentTypeOptions(contentType -> {})
+                        .frameOptions(frame -> frame.sameOrigin())
+                );
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

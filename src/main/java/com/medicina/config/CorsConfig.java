@@ -3,42 +3,45 @@ package com.medicina.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
+    @Bean(name = "appCorsConfigurationSource")
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 
         // Frontend
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("https://medicinas-backend.onrender.com");
-        config.addAllowedOrigin("https://*.render.com");
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://*.render.com",
+                "https://medicinas-*.onrender.com"
+        ));
 
         // Métodos HTTP
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("PUT");
-        config.addAllowedMethod("DELETE");
-        config.addAllowedMethod("OPTIONS");
+        configuration.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"
+        ));
 
         // Headers
-        config.addAllowedHeader("Origin");
-        config.addAllowedHeader("Content-Type");
-        config.addAllowedHeader("Accept");
-        config.addAllowedHeader("Authorization");
+        configuration.setAllowedHeaders(List.of(
+                "Authorization", "Content-Type", "Accept"
+        ));
 
-        // Headers Personalizados
-        config.addExposedHeader("Authorization");
+        // Headers expuestos
+        configuration.setExposedHeaders(List.of(
+                "Authorization"
+        ));
 
         // Credenciales
-        config.setAllowCredentials(true);
+        configuration.setAllowCredentials(true);
 
-        source.registerCorsConfiguration("/api/**", config);
-        return new CorsFilter(source);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
