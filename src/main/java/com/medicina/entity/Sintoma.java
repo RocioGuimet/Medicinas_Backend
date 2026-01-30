@@ -3,7 +3,12 @@ package com.medicina.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import java.util.HashSet;
+import java.util.Set;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +16,11 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "sintomas")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Sintoma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +31,5 @@ public class Sintoma {
     private String descripcion;
 
     @ManyToMany(mappedBy = "sintomasQueAlivia")
-    private List<Medicina> medicinasRecomendadas = new ArrayList<>();
+    private Set<Medicina> medicinasRecomendadas = new HashSet<>();
 }
