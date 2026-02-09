@@ -1,6 +1,5 @@
 HELP.md
 target/
-.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -33,9 +32,7 @@ build/
 .vscode/
 
 # Configuración de Spring Boot con contraseñas
-src/main/resources/application-local.properties
-src/main/resources/application.yml
-src/main/resources/application-*.properties
+src/main/resources/application-dev.properties
 
 # Variables de entorno
 .env
