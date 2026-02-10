@@ -40,7 +40,7 @@ El proyecto utiliza perfiles de Spring (`dev` y `prod`) para separar entornos:
 * ✅ **Headers de Seguridad**: Protección nativa contra XSS y Clickjacking mediante Spring Security
 * ✅ **Control de Acceso**: Consulta pública (GET) y gestión privada (POST/PUT/DELETE) mediante credenciales
 
-Nota sobre Seguridad: Las operaciones de lectura (GET) son de libre acceso. Para realizar operaciones de escritura, se requiere Basic Authentication. Podes registrar tu usuario administrador en el endpoint /api/auth/registrar.
+Nota sobre Seguridad: Las operaciones de lectura (GET) son de libre acceso. Para realizar operaciones de escritura, se requiere Basic Authentication.
 
 ## 📖 Documentación Interactiva
 Podés consultar las funciones en vivo aquí: `https://medicinas-api.onrender.com/swagger-ui/index.html`
