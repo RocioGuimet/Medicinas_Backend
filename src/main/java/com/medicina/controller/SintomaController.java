@@ -91,4 +91,25 @@ public class SintomaController {
                     .body("Error: " + e.getMessage());
         }
     }
+    @PutMapping("/sintomas/{id}")
+    public ResponseEntity<?> actualizarSintoma(@PathVariable Long id, @RequestBody Sintoma sintomaDetalles) {
+        try {
+            return sintomaRepository.findById(id).map(sintoma -> {
+                sintoma.setNombre(sintomaDetalles.getNombre());
+                sintoma.setDescripcion(sintomaDetalles.getDescripcion());
+
+                Sintoma actualizado = sintomaRepository.save(sintoma);
+                logger.info("修 Síntoma actualizado - ID: " + id);
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("mensaje", "Síntoma actualizado exitosamente");
+                response.put("data", actualizado);
+                return ResponseEntity.ok(response);
+            }).orElse(ResponseEntity.status(404).body("{\"error\": \"No se encontró el síntoma con ID " + id + "\"}"));
+
+        } catch (Exception e) {
+            logger.error("✗ Error al actualizar síntoma: ", e);
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
 }

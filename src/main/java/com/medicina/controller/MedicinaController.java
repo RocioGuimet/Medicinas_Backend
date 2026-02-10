@@ -129,5 +129,28 @@ public class MedicinaController {
                     .body("Error: " + e.getMessage());
         }
     }
+    @PutMapping("/medicinas/{id}")
+    public ResponseEntity<?> actualizarMedicina(@PathVariable Long id, @RequestBody Medicina medicinaDetalles) {
+        try {
+            return medicinaRepository.findById(id).map(medicina -> {
+                medicina.setNombre(medicinaDetalles.getNombre());
+                medicina.setDescripcion(medicinaDetalles.getDescripcion());
+                medicina.setModoUso(medicinaDetalles.getModoUso());
+                medicina.setNombreCientifico(medicinaDetalles.getNombreCientifico());
+
+                Medicina actualizada = medicinaRepository.save(medicina);
+                logger.info("修 Medicina actualizada - ID: " + id);
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("mensaje", "Medicina actualizada exitosamente");
+                response.put("data", actualizada);
+                return ResponseEntity.ok(response);
+            }).orElse(ResponseEntity.status(404).body("{\"error\": \"No se encontró la medicina con ID " + id + "\"}"));
+
+        } catch (Exception e) {
+            logger.error("✗ Error al actualizar medicina: ", e);
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
 }
 
