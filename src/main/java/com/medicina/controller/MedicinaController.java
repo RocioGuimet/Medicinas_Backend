@@ -144,7 +144,7 @@ public class MedicinaController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("mensaje", "Medicina actualizada exitosamente");
                 response.put("data", actualizada);
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok((Object) response);
             }).orElse(ResponseEntity.status(404).body("{\"error\": \"No se encontró la medicina con ID " + id + "\"}"));
 
         } catch (Exception e) {

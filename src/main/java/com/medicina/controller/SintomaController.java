@@ -104,7 +104,7 @@ public class SintomaController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("mensaje", "Síntoma actualizado exitosamente");
                 response.put("data", actualizado);
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok((Object) response);
             }).orElse(ResponseEntity.status(404).body("{\"error\": \"No se encontró el síntoma con ID " + id + "\"}"));
 
         } catch (Exception e) {
