@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MedicinaRepository extends JpaRepository<Medicina, Long> {
-    // Métodos CRUD básicos ya están incluidos
     List<Medicina> findByNombreContainingIgnoreCase(String nombre);
 }

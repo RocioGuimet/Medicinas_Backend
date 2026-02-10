@@ -9,6 +9,6 @@ INSERT INTO sintomas (nombre, descripcion) VALUES
 ('Insomnio', 'Dificultad para conciliar o mantener el sueño');
 
 -- Insertar medicinas
-INSERT INTO medicinas (nombre, descripcion, modo_uso) VALUES
-('Manzanilla', 'Calmante natural suave', 'Infusión de 5-10 minutos'),
-('Jengibre', 'Raíz antiinflamatoria', 'Infusión o rallado en comidas');
+INSERT INTO medicinas (nombre, descripcion, modo_uso, nombre_cientifico) VALUES
+('Manzanilla', 'Calmante natural suave', 'Infusión de 5-10 minutos', 'Matricaria chamomilla'),
+('Jengibre', 'Raíz antiinflamatoria', 'Infusión o rallado en comidas', 'Zingiber officinale');

@@ -70,4 +70,25 @@ public class SintomaController {
                             "\nStack: " + e.getStackTrace()[0]);
         }
     }
+    @DeleteMapping("/sintomas/{id}")
+    public ResponseEntity<?> eliminarSintoma(@PathVariable Long id) {
+        try {
+            if (!sintomaRepository.existsById(id)) {
+                return ResponseEntity.status(404).body("{\"error\": \"El síntoma con ID " + id + " no existe\"}");
+            }
+
+            sintomaRepository.deleteById(id);
+            logger.info("🗑 Síntoma eliminado - ID: " + id);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("mensaje", "Síntoma eliminado exitosamente");
+            response.put("id", id.toString());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("✗ Error eliminando síntoma: ", e);
+            return ResponseEntity.internalServerError()
+                    .body("Error: " + e.getMessage());
+        }
+    }
 }

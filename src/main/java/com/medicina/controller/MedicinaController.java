@@ -81,32 +81,53 @@ public class MedicinaController {
 
         return ResponseEntity.ok(response);
     }
-        @PostMapping("/medicinas")
-        public ResponseEntity<?> crearMedicina(@RequestBody Medicina medicina) {
-            try {
-                // Validación básica
-                if (medicina.getNombre() == null || medicina.getNombre().trim().isEmpty()) {
-                    return ResponseEntity.badRequest().body("{\"error\": \"El nombre es obligatorio\"}");
-                }
-
-                Medicina saved = medicinaRepository.save(medicina);
-                logger.info("✓ Medicina creada: " + saved.getNombre());
-
-                Map<String, String> response = new HashMap<>();
-                response.put("id", saved.getId().toString());
-                response.put("nombre", saved.getNombre());
-                response.put("descripcion", saved.getDescripcion());
-                response.put("modoUso", saved.getModoUso());
-                response.put("nombreCientifico", saved.getNombreCientifico());
-                response.put("mensaje", "Medicina creada exitosamente");
-
-                return ResponseEntity.ok(response);
-            } catch (Exception e) {
-                logger.error("✗ Error creando medicina: ", e);
-                return ResponseEntity.internalServerError()
-                        .body("Error: " + e.getMessage() +
-                                "\nStack: " + e.getStackTrace()[0]);
+    @PostMapping("/medicinas")
+    public ResponseEntity<?> crearMedicina(@RequestBody Medicina medicina) {
+        try {
+            // Validación básica
+            if (medicina.getNombre() == null || medicina.getNombre().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("{\"error\": \"El nombre es obligatorio\"}");
             }
+
+            Medicina saved = medicinaRepository.save(medicina);
+            logger.info("✓ Medicina creada: " + saved.getNombre());
+
+            Map<String, String> response = new HashMap<>();
+            response.put("id", saved.getId().toString());
+            response.put("nombre", saved.getNombre());
+            response.put("descripcion", saved.getDescripcion());
+            response.put("modoUso", saved.getModoUso());
+            response.put("nombreCientifico", saved.getNombreCientifico());
+            response.put("mensaje", "Medicina creada exitosamente");
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("✗ Error creando medicina: ", e);
+            return ResponseEntity.internalServerError()
+                    .body("Error: " + e.getMessage() +
+                            "\nStack: " + e.getStackTrace()[0]);
         }
+    }
+    @DeleteMapping("/medicinas/{id}")
+    public ResponseEntity<?> eliminarMedicina(@PathVariable Long id) {
+        try {
+            if (!medicinaRepository.existsById(id)) {
+                return ResponseEntity.status(404).body("{\"error\": \"La medicina con ID " + id + " no existe\"}");
+            }
+
+            medicinaRepository.deleteById(id);
+            logger.info("🗑 Medicina eliminada - ID: " + id);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("mensaje", "Medicina eliminada exitosamente");
+            response.put("id", id.toString());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("✗ Error eliminando medicina: ", e);
+            return ResponseEntity.internalServerError()
+                    .body("Error: " + e.getMessage());
+        }
+    }
 }
 
