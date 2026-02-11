@@ -1,23 +1,23 @@
 # 🌿 Medicinas Naturales -
 
-**API REST completa para consulta de medicinas naturales** con Spring Boot, PostgreSQL, frontend integrado, Dockerizado y despliegue en Render.
+**API REST completa para consulta de medicinas naturales** con Spring Boot, PostgreSQL, frontend integrado y despliegue automatizado en Render.
 
 ## ✨ Características
 
 ### 🔧 **Backend Avanzado**
-* ✅ **Spring Boot 4** con Java 25
+* ✅ **Spring Boot 3** con Java 17
 * ✅ **API REST** con endpoints documentados
 * ✅ **Spring Data JPA** + relaciones `@ManyToMany`
 * ✅ **PostgreSQL** con transacciones y persistencia  
 * ✅ **Manejo de excepciones** global con `@ControllerAdvice`
 * ✅ **Logging estructurado** para debugging
+* ✅ **Seguridad**: Autenticación **Basic Auth** sobre **HTTPS** para operaciones de escritura (POST/PUT/DELETE)
 
 ### ☁️ **Despliegue en la Nube (Render)**
-* ✅ **Dockerización** profesional con multi-stage builds  
-* ✅ **Base de datos PostgreSQL** gestionada por Render  
-* ✅ **Variables de entorno** seguras en Render Dashboard  
-* ✅ **Health checks** automáticos  
-* ✅ **Despliegue automático** desde GitHub  
+* ✅ **Dockerización** optimizada para despliegue rápido
+* ✅ **Base de Datos Gestionada**: PostgreSQL en la nube
+* ✅ **CI/CD**: Despliegue automático desde el repositorio de GitHub
+* ✅ **Health Checks**: Monitoreo constante del estado del servicio
 * ✅ **URL pública** accesible desde cualquier lugar (https://medicinas-api.onrender.com/)
 
 ### 🌐 **Frontend Integrado**
@@ -28,31 +28,22 @@
 * ✅ **Estados de carga/error** visuales
 
 ### 🗄️ **Arquitectura de Bases de Datos**
+El proyecto utiliza perfiles de Spring (`dev` y `prod`) para separar entornos:
+* **🌍 Producción (Render)**: Base de datos estable para la web pública
+   - URL: `https://medicinas-api.onrender.com/`
 
-El proyecto maneja dos bases de datos PostgreSQL completamente independientes para mantener separados los entornos de desarrollo y producción:
+* **💻 Local (Dev)**: Entorno controlado para pruebas
+  - URL: `http://localhost:8080/`
 
-#### 🌍 Base de Datos en Render (Producción)
-Entorno de producción real para usuarios finales
-Ubicación: Servidor en la nube de Render
-URL: `https://medicinas-api.onrender.com/`
-Datos: Información real y estable que ven los usuarios
-Gestión: PostgreSQL
+### 🔐 Seguridad Configurada
+* ✅ **CORS**: Configurado para aceptar peticiones de dominios específicos y desarrollo local
+* ✅ **Headers de Seguridad**: Protección nativa contra XSS y Clickjacking mediante Spring Security
+* ✅ **Control de Acceso**: Consulta pública (GET) y gestión privada (POST/PUT/DELETE) mediante credenciales
 
-#### 💻 Base de Datos Local (Desarrollo)
-Entorno de desarrollo y pruebas
-Ubicación: PostgreSQL instalado localmente
-URL:`http://localhost:8080/`(PostgreSQL en puerto 5433)
-Datos: Datos de prueba
-Gestión: PostgreSQL local con pgAdmin
+Nota sobre Seguridad: Las operaciones de lectura (GET) son de libre acceso. Para realizar operaciones de escritura, se requiere Basic Authentication.
 
-### 🔐 **Seguridad**
-* ✅ CORS Configuration para control de acceso: 
-   - Pre-configurado para frontend externo futuro
-   - Orígenes permitidos: `http://localhost:3000`, `https://*.render.com`
-   - Métodos: GET y POST (API principalmente de consulta, POST para administradores)
-   - Headers: Origin, Content-Type, Accept, Authorization
-   - Credenciales habilitadas para autenticación futura
-* ✅ **Security HTTP Headers** (XSS, HSTS, CSP)
+## 📖 Documentación Interactiva
+Podés consultar las funciones en vivo aquí: `https://medicinas-api.onrender.com/swagger-ui/index.html`
 
 ## 📸 Capturas de Pantalla
   
@@ -69,7 +60,7 @@ git clone https://github.com/RocioGuimet/Medicinas_Backend.git
 cd Medicinas_Backend
 docker-compose up --build
 ```
-### Opción con Render (PostgreSQL en la nube)
+### Opción en vivo con Render
 ```bash
 https://medicinas-api.onrender.com/
 ```
