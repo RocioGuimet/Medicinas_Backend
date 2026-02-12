@@ -18,20 +18,4 @@ public class AuthController {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
-    @PostMapping("/registrar")
-    public ResponseEntity<String> registrar(@RequestBody RegistroRequest request) {
-        if (usuarioRepository.findByUsername(request.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body("El usuario ya existe");
-        }
-
-        Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setUsername(request.getUsername());
-        // Encriptamos antes de guardar
-        nuevoUsuario.setPassword(passwordEncoder.encode(request.getPassword()));
-        nuevoUsuario.setRol("ADMIN");
-
-        usuarioRepository.save(nuevoUsuario);
-        return ResponseEntity.ok("Usuario registrado con éxito");
-    }
 }
