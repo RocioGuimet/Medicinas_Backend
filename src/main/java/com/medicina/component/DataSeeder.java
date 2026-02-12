@@ -22,6 +22,11 @@ public class DataSeeder implements CommandLineRunner {
         String adminUser = System.getenv("ADMIN_USERNAME");
         String adminPass = System.getenv("ADMIN_PASSWORD");
 
+        // --- LÍNEA DE LIMPIEZA TEMPORAL para eliminar usuarios antiguos---
+        usuarioRepository.deleteAll();
+        System.out.println("⚠️ TABLA DE USUARIOS LIMPIADA POR COMPLETO");
+        // ----------------------------------
+
         if (adminUser != null && adminPass != null && usuarioRepository.count() == 0) {
             Usuario admin = new Usuario();
             admin.setUsername(adminUser);
