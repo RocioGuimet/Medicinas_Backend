@@ -51,8 +51,6 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedMedicinasYSintomas() {
-        medicinaRepository.deleteAll();
-        sintomaRepository.deleteAll();
         if (medicinaRepository.count() == 0) {
 
             Sintoma insomnio = new Sintoma();
