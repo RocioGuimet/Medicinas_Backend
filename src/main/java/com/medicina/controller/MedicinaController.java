@@ -1,7 +1,10 @@
 package com.medicina.controller;
 
 import com.medicina.entity.Medicina;
+import com.medicina.entity.Sintoma;
 import com.medicina.repository.MedicinaRepository;
+import com.medicina.repository.SintomaRepository;
+import com.medicina.service.MedicinaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,28 +25,66 @@ public class MedicinaController {
     @Autowired
     private MedicinaRepository medicinaRepository;
 
+    @Autowired
+    private MedicinaService medicinaService;
+
+    @Autowired
+    private SintomaRepository sintomaRepository;
+
     @GetMapping("/medicinas")
     public ResponseEntity<?> obtenerTodasMedicinas() {
         try {
             List<Medicina> medicinas = medicinaRepository.findAll();
             logger.info("✓ Medicinas obtenidas: " + medicinas.size());
 
-            // SOLO datos básicos - SIN relaciones
-            List<Map<String, String>> response = medicinas.stream().map(med -> {
-                Map<String, String> medMap = new HashMap<>();
+            List<Map<String, Object>> response = medicinas.stream().map(med -> {
+                Map<String, Object> medMap = new HashMap<>();
                 medMap.put("id", med.getId().toString());
                 medMap.put("nombre", med.getNombre());
                 medMap.put("descripcion", med.getDescripcion());
                 medMap.put("modoUso", med.getModoUso());
+                medMap.put("nombreCientifico", med.getNombreCientifico());
+
+                List<String> sintomas = med.getSintomasQueAlivia().stream()
+                        .map(Sintoma::getNombre)
+                        .collect(Collectors.toList());
+                medMap.put("sintomas", sintomas);
+
                 return medMap;
             }).collect(Collectors.toList());
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("✗ Error: ", e);
-            return ResponseEntity.internalServerError()
-                    .body("Error: " + e.getMessage() +
-                            "\nStack: " + e.getStackTrace()[0]);
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/medicinas/por-sintomas")
+    public ResponseEntity<?> buscarPorSintomas(@RequestParam List<Long> ids) {
+        try {
+            List<Medicina> medicinas = medicinaService.buscarPorMalestares(ids);
+
+            List<Map<String, Object>> response = medicinas.stream().map(med -> {
+                Map<String, Object> medMap = new HashMap<>();
+                medMap.put("id", med.getId());
+                medMap.put("nombre", med.getNombre());
+                medMap.put("descripcion", med.getDescripcion());
+                medMap.put("modoUso", med.getModoUso());
+                medMap.put("nombreCientifico", med.getNombreCientifico());
+
+                List<String> sintomas = med.getSintomasQueAlivia().stream()
+                        .map(Sintoma::getNombre)
+                        .collect(Collectors.toList());
+                medMap.put("sintomas", sintomas);
+
+                return medMap;
+            }).collect(Collectors.toList());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("✗ Error buscando por malestares: ", e);
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
@@ -81,6 +122,8 @@ public class MedicinaController {
 
         return ResponseEntity.ok(response);
     }
+
+
     @PostMapping("/medicinas")
     public ResponseEntity<?> crearMedicina(@RequestBody Medicina medicina) {
         try {
