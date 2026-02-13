@@ -6,6 +6,34 @@
     <title>Medicinas Naturales - Buscador</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            /* Modo Claro */
+            --bg-body: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --container-bg: #ffffff;
+            --header-gradient: linear-gradient(to right, #2E7D32, #4CAF50);
+            --text-main: #333333;
+            --text-muted: #666666;
+            --card-bg: #ffffff;
+            --card-header: linear-gradient(to right, #E8F5E9, #C8E6C9);
+            --card-border: #e0e0e0;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --input-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            /* Modo Oscuro */
+            --bg-body: #121212;
+            --container-bg: #1e1e1e;
+            --header-gradient: linear-gradient(to right, #1b5e20, #2e7d32);
+            --text-main: #e0e0e0;
+            --text-muted: #999999;
+            --card-bg: #282828;
+            --card-header: linear-gradient(to right, #253d26, #1b5e20);
+            --card-border: #383838;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --input-bg: #2d2d2d;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,40 +42,121 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg-body);
             min-height: 100vh;
             padding: 20px;
+            color: var(--text-main);
+            transition: all 0.4s ease;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            background: white;
+            background: var(--container-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             overflow: hidden;
+            position: relative;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
         }
 
         header {
-            background: linear-gradient(to right, #2E7D32, #4CAF50);
+            background: var(--header-gradient);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
         }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        /* --- Estilos del Switch y Leyenda --- */
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
-        header p {
-            font-size: 1.1rem;
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 45px;
+        }
+
+        .theme-switch input { display: none; }
+
+        .slider {
+            background-color: rgba(255,255,255,0.3);
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 3px;
+            content: "";
+            height: 18px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 18px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: #81C784; }
+        input:checked + .slider:before { transform: translateX(19px); }
+
+        .icons-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-diamond {
+            color: #b9f2ff;
+            font-size: 0.9rem;
+            filter: drop-shadow(0 0 5px rgba(185, 242, 255, 0.8));
+            transition: all 0.3s ease;
+        }
+
+        .icon-moon {
+            color: #f1c40f;
+            font-size: 0.9rem;
+            filter: drop-shadow(0 0 5px rgba(185, 242, 255, 0.8));
+            transition: all 0.3s ease;
+        }
+
+        @keyframes shine {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(185, 242, 255, 1)); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+
+        .dark-side-text {
+            font-style: italic;
+            font-size: 0.65rem;
+            margin-top: 5px;
+            color: white;
             opacity: 0.9;
+            letter-spacing: 0.5px;
         }
 
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        header p { font-size: 1.1rem; opacity: 0.9; }
+
+        /* --- Secciones --- */
         .search-section {
             padding: 30px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--card-border);
         }
 
         .search-box {
@@ -64,12 +173,9 @@
             border-radius: 50px;
             font-size: 1rem;
             outline: none;
+            background: var(--input-bg);
+            color: var(--text-main);
             transition: all 0.3s;
-        }
-
-        #searchInput:focus {
-            border-color: #2E7D32;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
         }
 
         #searchButton {
@@ -86,15 +192,7 @@
             gap: 8px;
         }
 
-        #searchButton:hover {
-            background: #2E7D32;
-            transform: translateY(-2px);
-        }
-
-        .results-section {
-            padding: 30px;
-        }
-
+        .results-section { padding: 30px; }
         .results-header {
             display: flex;
             justify-content: space-between;
@@ -102,13 +200,9 @@
             margin-bottom: 20px;
         }
 
-        .results-header h2 {
-            color: #333;
-        }
-
         #resultsCount {
-            background: #E8F5E9;
-            color: #2E7D32;
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
             padding: 5px 15px;
             border-radius: 20px;
             font-weight: bold;
@@ -121,158 +215,62 @@
         }
 
         .medicine-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s;
-            border: 1px solid #e0e0e0;
-        }
-
-        .medicine-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
         }
 
         .medicine-header {
-            background: linear-gradient(to right, #E8F5E9, #C8E6C9);
+            background: var(--card-header);
             padding: 20px;
-            border-bottom: 1px solid #C8E6C9;
+            border-bottom: 1px solid var(--card-border);
         }
 
-        .medicine-name {
-            font-size: 1.4rem;
-            color: #2E7D32;
-            margin-bottom: 5px;
-        }
-
-        .medicine-id {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .medicine-body {
-            padding: 20px;
-        }
-
-        .medicine-desc {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .medicine-usage {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #4CAF50;
-            font-weight: 500;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #666;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
+        .medicine-name { font-size: 1.4rem; color: #4CAF50; margin-bottom: 5px; }
+        .medicine-body { padding: 20px; }
+        .medicine-desc { color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
 
         footer {
             text-align: center;
             padding: 20px;
-            color: #666;
-            border-top: 1px solid #eee;
+            color: var(--text-muted);
+            border-top: 1px solid var(--card-border);
             font-size: 0.9rem;
         }
 
         @media (max-width: 768px) {
-            .container {
-                border-radius: 10px;
-            }
-
-            header {
-                padding: 20px;
-            }
-
-            header h1 {
-                font-size: 2rem;
-            }
-
-            .search-box {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            #searchInput {
-                padding: 18px 20px;  /* ← AÑADE: Más alto para dedos */
-                font-size: 1.05rem;   /* ← AÑADE: Texto un poco más grande */
-            }
-
-            #searchButton {
-                width: 100%;
-                justify-content: center;
-                padding: 18px 30px;
-                margin-top: 5px;
-                margin-bottom: 5px;
-                font-size: 1.05rem;
-                border-radius: 15px;
-            }
-
-            .medicines-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .medicine-card {
-                margin: 5px 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .search-section {
-                padding: 20px 15px;
-            }
-
-            .results-section {
-                padding: 20px 15px;
-            }
-
-            #searchButton {
-                padding: 20px 30px;
-                font-size: 1.1rem;
-            }
-
-            #searchInput {
-                padding: 20px;
-                font-size: 1.1rem;
-            }
-        }
+            .search-box { flex-direction: column; }
+            header h1 { font-size: 1.8rem; }
+            .theme-switch-wrapper { position: static; margin-bottom: 20px; }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <header>
+        <div class="theme-switch-wrapper">
+            <div class="switch-container">
+                <div class="icons-row">
+                    <i class="fas fa-gem icon-diamond"></i>
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider"></div>
+                    </label>
+                    <i class="fas fa-moon icon-moon"></i>
+                </div>
+                <p class="dark-side-text" id="modeText">Shine On You Crazy Diamond</p>
+            </div>
+        </div>
         <h1><i class="fas fa-leaf"></i> Medicinas Naturales</h1>
         <p>"Que tu alimento sea tu medicina, y tu medicina tu alimento" -Hipócrates</p>
     </header>
 
     <section class="search-section">
         <div class="search-box">
-            <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Busca una medicina (ej: manzanilla, jengibre...)"
-                    autocomplete="off"
-            >
+            <input type="text" id="searchInput" placeholder="Busca una medicina..." autocomplete="off">
             <button id="searchButton">
                 <i class="fas fa-search"></i> Buscar
             </button>
@@ -284,10 +282,8 @@
             <h2 id="resultsTitle">Todas las medicinas</h2>
             <span id="resultsCount">0 encontradas</span>
         </div>
-
         <div id="resultsContainer" class="medicines-grid">
             <div class="empty-state">
-                <i class="fas fa-spinner fa-spin"></i>
                 <p>Cargando medicinas...</p>
             </div>
         </div>
@@ -299,150 +295,111 @@
 </div>
 
 <script>
-    // Variables globales
     let allMedicines = [];
 
-    // Cargar todas las medicinas al inicio
+    // --- LÓGICA DARK MODE ---
+    const toggleSwitch = document.querySelector('#checkbox');
+    const modeText = document.querySelector('#modeText');
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            toggleSwitch.checked = true;
+            modeText.textContent = "Mode Dark Side Of The Moon";
+        } else {
+            modeText.textContent = "Shine On You Crazy Diamond";
+        }
+    }
+
+    toggleSwitch.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            modeText.textContent = "Mode Dark Side Of The Moon";
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            modeText.textContent = "Shine On You Crazy Diamond";
+        }
+    });
+
+    // --- LÓGICA DE DATOS ---
     document.addEventListener('DOMContentLoaded', () => {
         loadMedicines();
-
-        // Configurar búsqueda en tiempo real
         const searchInput = document.getElementById('searchInput');
+
         searchInput.addEventListener('input', debounce(() => {
             searchMedicines(searchInput.value);
         }, 300));
 
-        // Configurar botón de búsqueda
         document.getElementById('searchButton').addEventListener('click', () => {
             searchMedicines(searchInput.value);
         });
-
-        // Buscar al presionar Enter
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                searchMedicines(searchInput.value);
-            }
-        });
     });
 
-    // Función para cargar todas las medicinas
     async function loadMedicines() {
         try {
-            showLoading();
             const response = await fetch('/api/medicinas');
-            if (!response.ok) throw new Error('Error al cargar medicinas');
-
             allMedicines = await response.json();
             displayMedicines(allMedicines);
             updateResultsTitle('Todas las medicinas', allMedicines.length);
         } catch (error) {
-            console.error('Error:', error);
-            showError('No se pudieron cargar las medicinas. Intenta recargar la página.');
+            console.error(error);
         }
     }
 
-    // Función para buscar medicinas
     async function searchMedicines(query) {
-        try {
-            showLoading();
-
-            let medicines;
-            if (!query.trim()) {
-                // Si no hay búsqueda, mostrar todas
-                medicines = allMedicines;
-            } else {
-                // Hacer búsqueda en API
-                const response = await fetch(`/api/medicinas/buscar?q=${encodeURIComponent(query)}`);
-                if (!response.ok) throw new Error('Error en la búsqueda');
-                medicines = await response.json();
-            }
-
-            displayMedicines(medicines);
-            updateResultsTitle(
-                query.trim() ? `Resultados para "${query}"` : 'Todas las medicinas',
-                medicines.length
-            );
-        } catch (error) {
-            console.error('Error:', error);
-            showError('Error en la búsqueda. Intenta nuevamente.');
-        }
-    }
-
-    // Función para mostrar medicinas en la página
-    function displayMedicines(medicines) {
-        const container = document.getElementById('resultsContainer');
-
-        if (medicines.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state" style="grid-column: 1 / -1">
-                    <i class="fas fa-search"></i>
-                    <h3>No se encontraron medicinas</h3>
-                    <p>Intenta con otros términos de búsqueda</p>
-                </div>
-            `;
+        if (!query.trim()) {
+            displayMedicines(allMedicines);
+            updateResultsTitle('Todas las medicinas', allMedicines.length);
             return;
         }
+        try {
+            const response = await fetch(`/api/medicinas/buscar?q=${encodeURIComponent(query)}`);
+            const medicines = await response.json();
+            displayMedicines(medicines);
+            updateResultsTitle(`Resultados para "${query}"`, medicines.length);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
-        container.innerHTML = medicines.map(medicine => `
+    function displayMedicines(medicines) {
+        const container = document.getElementById('resultsContainer');
+        if (medicines.length === 0) {
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted)"><h3>No se encontraron resultados</h3></div>`;
+            return;
+        }
+        container.innerHTML = medicines.map(m => `
             <div class="medicine-card">
                 <div class="medicine-header">
-                    <h3 class="medicine-name">${escapeHtml(medicine.nombre)}</h3>
-                    <div class="medicine-id">ID: ${medicine.id}</div>
+                    <h3 class="medicine-name">${escapeHtml(m.nombre)}</h3>
+                    <small style="color:var(--text-muted)">ID: ${m.id}</small>
                 </div>
                 <div class="medicine-body">
-                    <p class="medicine-desc">${escapeHtml(medicine.descripcion || 'Sin descripción disponible')}</p>
-                    <div class="medicine-usage">
-                        <i class="fas fa-mortar-pestle"></i>
-                        <span>${escapeHtml(medicine.modoUso || 'Uso no especificado')}</span>
+                    <p class="medicine-desc">${escapeHtml(m.descripcion || 'Sin descripción')}</p>
+                    <div style="color:#4CAF50; font-weight:500; font-size: 0.9rem;">
+                        <i class="fas fa-mortar-pestle"></i> ${escapeHtml(m.modoUso || 'No especificado')}
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    // Función para actualizar título y contador
     function updateResultsTitle(title, count) {
         document.getElementById('resultsTitle').textContent = title;
-        document.getElementById('resultsCount').textContent = `${count} ${count === 1 ? 'encontrada' : 'encontradas'}`;
+        document.getElementById('resultsCount').textContent = `${count} medicina(s)`;
     }
 
-    // Función para mostrar estado de carga
-    function showLoading() {
-        const container = document.getElementById('resultsContainer');
-        container.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Cargando...</p>
-            </div>
-        `;
-    }
-
-    // Función para mostrar error
-    function showError(message) {
-        const container = document.getElementById('resultsContainer');
-        container.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>¡Ups! Algo salió mal</h3>
-                <p>${message}</p>
-            </div>
-        `;
-    }
-
-    // Utilidad: debounce para búsqueda en tiempo real
     function debounce(func, wait) {
         let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
+        return (...args) => {
             clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+            timeout = setTimeout(() => func(...args), wait);
         };
     }
 
-    // Utilidad: escapar HTML para seguridad
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
