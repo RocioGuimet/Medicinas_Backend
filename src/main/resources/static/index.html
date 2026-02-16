@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Modo Claro */
             --bg-body: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --container-bg: #ffffff;
             --header-gradient: linear-gradient(to right, #2E7D32, #4CAF50);
@@ -21,7 +20,6 @@
         }
 
         [data-theme="dark"] {
-            /* Modo Oscuro */
             --bg-body: #121212;
             --container-bg: #1e1e1e;
             --header-gradient: linear-gradient(to right, #1b5e20, #2e7d32);
@@ -34,218 +32,87 @@
             --input-bg: #2d2d2d;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-        body {
-            background: var(--bg-body);
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--text-main);
-            transition: all 0.4s ease;
-        }
+        body { background: var(--bg-body); padding: 20px; color: var(--text-main); transition: all 0.4s ease; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--container-bg);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            position: relative;
-            transition: background 0.4s ease, box-shadow 0.4s ease;
-        }
+        .container { max-width: 1000px; margin: 0 auto; background: var(--container-bg); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; position: relative; }
 
-        header {
-            background: var(--header-gradient);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        /* --- Estilos del Switch y Leyenda --- */
-        .theme-switch-wrapper {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .theme-switch {
-            display: inline-block;
-            height: 24px;
-            position: relative;
-            width: 45px;
-        }
-
-        .theme-switch input { display: none; }
-
-        .slider {
-            background-color: rgba(255,255,255,0.3);
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            background-color: white;
-            bottom: 3px;
-            content: "";
-            height: 18px;
-            left: 4px;
-            position: absolute;
-            transition: .4s;
-            width: 18px;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider { background-color: #81C784; }
-        input:checked + .slider:before { transform: translateX(19px); }
-
-        .icons-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .icon-diamond {
-            color: #b9f2ff;
-            font-size: 0.9rem;
-            filter: drop-shadow(0 0 5px rgba(185, 242, 255, 0.8));
-            transition: all 0.3s ease;
-        }
-
-        .icon-moon {
-            color: #f1c40f;
-            font-size: 0.9rem;
-            filter: drop-shadow(0 0 5px rgba(185, 242, 255, 0.8));
-            transition: all 0.3s ease;
-        }
-
-        @keyframes shine {
-            0% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(185, 242, 255, 1)); }
-            100% { opacity: 0.8; transform: scale(1); }
-        }
-
-        .dark-side-text {
-            font-style: italic;
-            font-size: 0.65rem;
-            margin-top: 5px;
-            color: white;
-            opacity: 0.9;
-            letter-spacing: 0.5px;
-        }
-
+        /* --- HEADER --- */
+        header { background: var(--header-gradient); color: white; padding: 40px 30px; text-align: center; position: relative; }
         header h1 { font-size: 2.5rem; margin-bottom: 10px; }
         header p { font-size: 1.1rem; opacity: 0.9; }
 
-        /* --- Secciones --- */
-        .search-section {
-            padding: 30px;
-            border-bottom: 1px solid var(--card-border);
-        }
+        /* --- SWITCH DIAMANTE Y LUNA --- */
+        .theme-switch-wrapper { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .theme-switch { display: inline-block; height: 24px; width: 45px; position: relative; }
+        .theme-switch input { display: none; }
+        .slider { background-color: rgba(255,255,255,0.3); bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: white; bottom: 3px; content: ""; height: 18px; left: 4px; position: absolute; transition: .4s; width: 18px; border-radius: 50%; }
+        input:checked + .slider { background-color: #81C784; }
+        input:checked + .slider:before { transform: translateX(19px); }
+        .icons-row { display: flex; align-items: center; gap: 12px; }
+        .icon-diamond { color: #b9f2ff; font-size: 0.9rem; filter: drop-shadow(0 0 5px rgba(185, 242, 255, 0.8)); }
+        .icon-moon { color: #f1c40f; font-size: 0.9rem; filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.8)); }
+        .dark-side-text { font-style: italic; font-size: 0.65rem; margin-top: 5px; color: white; opacity: 0.9; }
 
-        .search-box {
-            display: flex;
-            gap: 10px;
-            max-width: 600px;
+        /* --- SECCIONES --- */
+        .section-container {
+            padding: 35px 20px;
+            max-width: 900px;
             margin: 0 auto;
-        }
-
-        #searchInput {
-            flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #4CAF50;
-            border-radius: 50px;
-            font-size: 1rem;
-            outline: none;
-            background: var(--input-bg);
-            color: var(--text-main);
-            transition: all 0.3s;
-        }
-
-        #searchButton {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 0 30px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .results-section { padding: 30px; }
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        #resultsCount {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4CAF50;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        .medicines-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .medicine-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px var(--shadow);
-            transition: all 0.3s ease;
-            border: 1px solid var(--card-border);
-        }
-
-        .medicine-header {
-            background: var(--card-header);
-            padding: 20px;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .medicine-name { font-size: 1.4rem; color: #4CAF50; margin-bottom: 5px; }
-        .medicine-body { padding: 20px; }
-        .medicine-desc { color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
-
-        footer {
             text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            border-top: 1px solid var(--card-border);
-            font-size: 0.9rem;
+        }
+}
+        .section-border { border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+
+        /* --- TÍTULOS--- */
+        .titulo-verde {
+            color: #2E7D32;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        h2.titulo-verde { font-size: 2rem; }
+        h3.titulo-verde { font-size: 1.6rem; }
+
+        /* --- BOTONES SÍNTOMAS --- */
+        .btn-sintoma {
+            border-radius: 50px; padding: 10px 22px; font-size: 0.95rem; border: 2px solid #81C784;
+            background: var(--container-bg); color: var(--text-main); cursor: pointer; transition: 0.3s; margin: 5px;
+        }
+        .btn-sintoma.selected { background-color: #2E7D32; color: white; border-color: #2E7D32; }
+
+        #contenedor-sintomas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px auto;
+            max-width: 800px;
         }
 
-        @media (max-width: 768px) {
-            .search-box { flex-direction: column; }
-            header h1 { font-size: 1.8rem; }
-            .theme-switch-wrapper { position: static; margin-bottom: 20px; }
+        /* --- BOTÓN CONSULTAR --- */
+        #btn-consultar {
+            background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+            color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; margin-top: 25px; transition: 0.3s;
         }
+
+        /* --- BUSCADOR --- */
+        .search-box { display: flex; gap: 10px; max-width: 600px; margin: 20px auto; }
+        #searchInput { flex: 1; padding: 15px 20px; border: 2px solid #4CAF50; border-radius: 50px; outline: none; background: var(--input-bg); color: var(--text-main); }
+        #searchButton { background: #4CAF50; color: white; border: none; border-radius: 50px; padding: 0 25px; cursor: pointer; }
+
+        /* --- TARJETAS --- */
+        .medicines-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; text-align: left; }
+        .medicine-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow); border: 1px solid var(--card-border); }
+        .medicine-header { background: var(--card-header); padding: 20px; border-bottom: 1px solid var(--card-border); }
+        .medicine-name { font-size: 1.4rem; color: #4CAF50; }
+        .medicine-body { padding: 20px; }
+        .medicine-desc { color: var(--text-muted); line-height: 1.6; }
+
+        footer { text-align: center; padding: 30px; color: var(--text-muted); border-top: 1px solid var(--card-border); font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -264,30 +131,47 @@
                 <p class="dark-side-text" id="modeText">Shine On You Crazy Diamond</p>
             </div>
         </div>
-        <h1><i class="fas fa-leaf"></i> Medicinas Naturales</h1>
+        <h1><i class="fas fa-leaf"></i> Portal de Medicinas Naturales</h1>
         <p>"Que tu alimento sea tu medicina, y tu medicina tu alimento" -Hipócrates</p>
     </header>
 
-    <section class="search-section">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Busca una medicina..." autocomplete="off">
-            <button id="searchButton">
-                <i class="fas fa-search"></i> Buscar
-            </button>
-        </div>
-    </section>
+    <main>
+        <section class="section-container">
+            <h2 class="titulo-verde">Bienvenid@</h2>
+            <p class="text-muted">Tu guía hacia el bienestar orgánico y tradicional</p>
+        </section>
 
-    <section class="results-section">
-        <div class="results-header">
-            <h2 id="resultsTitle">Todas las medicinas</h2>
-            <span id="resultsCount">0 encontradas</span>
-        </div>
-        <div id="resultsContainer" class="medicines-grid">
-            <div class="empty-state">
-                <p>Cargando medicinas...</p>
+        <section class="section-container section-border">
+            <h3 class="titulo-verde">¿Tenés algún malestar hoy?</h3>
+            <p class="text-muted">Seleccioná una o varias opciones para encontrar la mejor medicina</p>
+
+            <div id="contenedor-sintomas">
             </div>
-        </div>
-    </section>
+
+            <div style="margin-top: 20px;">
+                <button id="btn-consultar" style="display: none;">
+                    Consultar Solución Natural
+                </button>
+            </div>
+        </section>
+
+        <section class="section-container">
+            <h3 class="titulo-verde">¿O preferís consultar los beneficios de algo en particular?</h3>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Escribe el nombre de una planta (ej: Manzanilla)...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="results-header" style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+                <h2 id="resultsTitle" style="color: #4CAF50; font-size: 1.5rem;">Catálogo de Medicinas</h2>
+                <span id="resultsCount" style="background: rgba(76, 175, 80, 0.1); color: #4CAF50; padding: 5px 15px; border-radius: 20px; font-weight: bold;">0 encontradas</span>
+            </div>
+
+            <div id="resultsContainer" class="medicines-grid">
+            </div>
+        </section>
+    </main>
 
     <footer>
         <p>API Medicinas Naturales • Proyecto de Rocio Lourdes Guimet</p>
@@ -337,6 +221,53 @@
             searchMedicines(searchInput.value);
         });
     });
+
+    let sintomasSeleccionados = [];
+
+    async function cargarSintomas() {
+        try {
+            const response = await fetch('http://localhost:8080/api/sintomas');
+            const sintomas = await response.json();
+
+            const contenedor = document.getElementById('contenedor-sintomas');
+            contenedor.innerHTML = ''; // Limpiamos por si acaso
+
+            sintomas.forEach(sintoma => {
+                const boton = document.createElement('button');
+                boton.innerText = sintoma.nombre;
+                boton.className = 'btn-sintoma m-1';
+                boton.dataset.id = sintoma.id;
+
+                boton.onclick = () => toggleSintoma(boton, sintoma.id);
+
+                contenedor.appendChild(boton);
+            });
+        } catch (error) {
+            console.error("Error cargando síntomas:", error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarSintomas);
+
+    function toggleSintoma(boton, id) {
+        const index = sintomasSeleccionados.indexOf(id);
+
+        if (index > -1) {
+            sintomasSeleccionados.splice(index, 1);
+            boton.classList.remove('selected'); // Quitamos color
+        } else {
+            sintomasSeleccionados.push(id);
+            boton.classList.add('selected'); // Ponemos color
+        }
+
+        // Mostrar u ocultar el botón de Consultar según si hay seleccionados
+        const btnConsultar = document.getElementById('btn-consultar');
+        if (sintomasSeleccionados.length > 0) {
+            btnConsultar.style.display = 'inline-block';
+        } else {
+            btnConsultar.style.display = 'none';
+        }
+    }
 
     async function loadMedicines() {
         try {
