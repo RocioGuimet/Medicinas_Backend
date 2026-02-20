@@ -63,7 +63,7 @@
             margin: 0 auto;
             text-align: center;
         }
-}
+
         .section-border { border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
 
         /* --- TÍTULOS--- */
@@ -180,6 +180,7 @@
 
 <script>
     let allMedicines = [];
+    let sintomasSeleccionados = [];
 
     // --- LÓGICA DARK MODE ---
     const toggleSwitch = document.querySelector('#checkbox');
@@ -211,31 +212,59 @@
     // --- LÓGICA DE DATOS ---
     document.addEventListener('DOMContentLoaded', () => {
         loadMedicines();
+        cargarSintomas();
+
+        const btnConsultar = document.getElementById('btn-consultar');
+        if(btnConsultar) {
+            btnConsultar.addEventListener('click', consultarPorSintomas);
+        }
+
         const searchInput = document.getElementById('searchInput');
+        if(searchInput) {
+            searchInput.addEventListener('input', debounce(() => {
+                searchMedicines(searchInput.value);
+            }, 300));
+        }
 
-        searchInput.addEventListener('input', debounce(() => {
-            searchMedicines(searchInput.value);
-        }, 300));
-
-        document.getElementById('searchButton').addEventListener('click', () => {
-            searchMedicines(searchInput.value);
-        });
+        const searchButton = document.getElementById('searchButton');
+        if(searchButton) {
+            searchButton.addEventListener('click', () => {
+                searchMedicines(searchInput.value);
+            });
+        }
     });
 
-    let sintomasSeleccionados = [];
+    function toggleSintoma(boton, id) {
+        const index = sintomasSeleccionados.indexOf(id);
+
+        if (index > -1) {
+            sintomasSeleccionados.splice(index, 1);
+            boton.classList.remove('selected');
+        } else {
+            sintomasSeleccionados.push(id);
+            boton.classList.add('selected');
+        }
+
+        const btnConsultar = document.getElementById('btn-consultar');
+        if (sintomasSeleccionados.length > 0) {
+            btnConsultar.style.display = 'inline-block';
+        } else {
+            btnConsultar.style.display = 'none';
+        }
+    }
 
     async function cargarSintomas() {
         try {
-            const response = await fetch('http://localhost:8080/api/sintomas');
+            const response = await fetch('/api/sintomas');
             const sintomas = await response.json();
 
             const contenedor = document.getElementById('contenedor-sintomas');
-            contenedor.innerHTML = ''; // Limpiamos por si acaso
+            contenedor.innerHTML = '';
 
             sintomas.forEach(sintoma => {
                 const boton = document.createElement('button');
                 boton.innerText = sintoma.nombre;
-                boton.className = 'btn-sintoma m-1';
+                boton.className = 'btn-sintoma';
                 boton.dataset.id = sintoma.id;
 
                 boton.onclick = () => toggleSintoma(boton, sintoma.id);
@@ -247,25 +276,37 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', cargarSintomas);
-
-    function toggleSintoma(boton, id) {
-        const index = sintomasSeleccionados.indexOf(id);
-
-        if (index > -1) {
-            sintomasSeleccionados.splice(index, 1);
-            boton.classList.remove('selected'); // Quitamos color
-        } else {
-            sintomasSeleccionados.push(id);
-            boton.classList.add('selected'); // Ponemos color
+    async function consultarPorSintomas() {
+        if (sintomasSeleccionados.length === 0) {
+            alert("Por favor, selecciona al menos un malestar.");
+            return;
         }
 
-        // Mostrar u ocultar el botón de Consultar según si hay seleccionados
-        const btnConsultar = document.getElementById('btn-consultar');
-        if (sintomasSeleccionados.length > 0) {
-            btnConsultar.style.display = 'inline-block';
-        } else {
-            btnConsultar.style.display = 'none';
+        const params = new URLSearchParams();
+        sintomasSeleccionados.forEach(id => params.append('sintomaIds', id));
+
+        const url = `/api/medicinas/por-sintomas?${params.toString()}`;
+
+        try {
+            console.log("Consultando a:", url);
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error("Error 401: El servidor pide contraseña. Revisa el SecurityConfig.");
+                }
+                throw new Error(`Error en el servidor: ${response.status}`);
+            }
+
+            const resultados = await response.json();
+            displayMedicines(resultados);
+            updateResultsTitle(`Soluciones para tus malestares`, resultados.length);
+
+            document.getElementById('resultsTitle').scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error("Error al consultar medicinas:", error);
+            alert("No se pudo obtener la solución.");
         }
     }
 

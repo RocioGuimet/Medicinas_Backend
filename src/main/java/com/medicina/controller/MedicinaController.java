@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,7 @@ public class MedicinaController {
 
             List<Map<String, Object>> response = medicinas.stream().map(med -> {
                 Map<String, Object> medMap = new HashMap<>();
-                medMap.put("id", med.getId().toString());
+                medMap.put("id", med.getId());
                 medMap.put("nombre", med.getNombre());
                 medMap.put("descripcion", med.getDescripcion());
                 medMap.put("modoUso", med.getModoUso());
@@ -56,14 +57,14 @@ public class MedicinaController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("✗ Error: ", e);
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/medicinas/por-sintomas")
-    public ResponseEntity<?> buscarPorSintomas(@RequestParam List<Long> ids) {
+    public ResponseEntity<List<Map<String, Object>>> buscarPorSintomas(@RequestParam("sintomaIds") List<Long> Ids) {
         try {
-            List<Medicina> medicinas = medicinaService.buscarPorMalestares(ids);
+            List<Medicina> medicinas = medicinaService.buscarPorMalestares(Ids);
 
             List<Map<String, Object>> response = medicinas.stream().map(med -> {
                 Map<String, Object> medMap = new HashMap<>();
@@ -82,9 +83,10 @@ public class MedicinaController {
             }).collect(Collectors.toList());
 
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             logger.error("✗ Error buscando por malestares: ", e);
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

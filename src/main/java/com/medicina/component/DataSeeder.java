@@ -51,6 +51,8 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedMedicinasYSintomas() {
+        medicinaRepository.deleteAll();
+        sintomaRepository.deleteAll();
         if (medicinaRepository.count() == 0) {
 
             Sintoma insomnio = new Sintoma();
@@ -65,23 +67,29 @@ public class DataSeeder implements CommandLineRunner {
             digestion.setNombre("Mala digestión");
             digestion.setDescripcion("Dolor de estómago o pesadez");
 
-            sintomaRepository.saveAll(List.of(insomnio, ansiedad, digestion));
+            List<Sintoma> sintomasGuardados = sintomaRepository.saveAll(List.of(insomnio, ansiedad, digestion));
+
+            Sintoma sInsomnio = sintomasGuardados.get(0);
+            Sintoma sAnsiedad = sintomasGuardados.get(1);
+            Sintoma sDigestion = sintomasGuardados.get(2);
 
             Medicina manzanilla = new Medicina();
             manzanilla.setNombre("Manzanilla");
             manzanilla.setDescripcion("Flores calmantes para digestión");
             manzanilla.setModoUso("Infusión: 1 cucharada/saquito por taza de agua hirviendo");
             manzanilla.setNombreCientifico("Matricaria chamomilla");
-            manzanilla.setSintomasQueAlivia(List.of(ansiedad, digestion));
+            manzanilla.getSintomasQueAlivia().add(sAnsiedad);
+            manzanilla.getSintomasQueAlivia().add(sDigestion);
+            medicinaRepository.save(manzanilla);
 
             Medicina valeriana = new Medicina();
             valeriana.setNombre("Valeriana");
             valeriana.setDescripcion("Raíz conocida por sus propiedades sedantes");
             valeriana.setModoUso("Infusión o gotas antes de dormir");
             valeriana.setNombreCientifico("Valeriana officinalis");
-            valeriana.setSintomasQueAlivia(List.of(insomnio, ansiedad));
-
-            medicinaRepository.saveAll(List.of(manzanilla, valeriana));
+            valeriana.getSintomasQueAlivia().add(sInsomnio);
+            valeriana.getSintomasQueAlivia().add(sAnsiedad);
+            medicinaRepository.save(valeriana);
 
             System.out.println("✅ Medicinas y síntomas vinculados cargados con éxito.");
         }
