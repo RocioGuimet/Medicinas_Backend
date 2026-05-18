@@ -9,6 +9,7 @@ import com.medicina.repository.SintomaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.core.env.Environment;
 import java.util.List;
 
 @Component
@@ -18,15 +19,18 @@ public class DataSeeder implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final MedicinaRepository medicinaRepository;
     private final SintomaRepository sintomaRepository;
+    private final Environment env;
 
     public DataSeeder(UsuarioRepository usuarioRepository,
                       PasswordEncoder passwordEncoder,
                       MedicinaRepository medicinaRepository,
-                      SintomaRepository sintomaRepository) {
+                      SintomaRepository sintomaRepository,
+                      Environment env) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.medicinaRepository = medicinaRepository;
         this.sintomaRepository = sintomaRepository;
+        this.env = env;
     }
 
     @Override
@@ -36,17 +40,25 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedUsuarioAdmin() {
-        String adminUser = System.getenv("ADMIN_USERNAME");
-        String adminPass = System.getenv("ADMIN_PASSWORD");
+        // Leer desde variables de entorno o desde application-*.properties (Spring Environment)
+        // Si no existen, usar valores por defecto para facilitar despliegues rápidos (prototipo)
+        String adminUser = env.getProperty("ADMIN_USERNAME", "admin");
+        String adminPass = env.getProperty("ADMIN_PASSWORD", "admin123");
 
-        if (adminUser != null && adminPass != null && usuarioRepository.count() == 0) {
+        boolean providedInEnv = env.containsProperty("ADMIN_USERNAME") && env.containsProperty("ADMIN_PASSWORD");
+
+        if (usuarioRepository.count() == 0) {
             Usuario admin = new Usuario();
             admin.setUsername(adminUser);
             admin.setPassword(passwordEncoder.encode(adminPass));
             admin.setRol("ROLE_ADMIN");
 
             usuarioRepository.save(admin);
-            System.out.println("✅ Usuario administrador inicial creado con éxito.");
+            if (providedInEnv) {
+                System.out.println("✅ Usuario administrador inicial creado con las variables de entorno.");
+            } else {
+                System.out.println("⚠️ Usuario administrador creado con valores por defecto (admin/admin123). Recomendable cambiar credenciales en entorno de producción.");
+            }
         }
     }
 
