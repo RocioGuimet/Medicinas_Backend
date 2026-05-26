@@ -41,6 +41,8 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedUsuarioAdmin() {
         // Leer desde variables de entorno o desde application-*.properties (Spring Environment)
+
+
         // Si no existen, usar valores por defecto para facilitar despliegues rápidos (prototipo)
         String adminUser = env.getProperty("ADMIN_USERNAME", "admin");
         String adminPass = env.getProperty("ADMIN_PASSWORD", "admin123");

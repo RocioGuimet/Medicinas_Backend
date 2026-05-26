@@ -1,5 +1,4 @@
 ---- Limpiar si existe
-DELETE FROM medicina_sintoma;
 DELETE FROM medicinas;
 DELETE FROM sintomas;
 --
