@@ -99,7 +99,8 @@
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-						</exclude>
+                            <version>1.18.34</version>
+                        </exclude>
 					</excludes>
 				</configuration>
 			</plugin>
